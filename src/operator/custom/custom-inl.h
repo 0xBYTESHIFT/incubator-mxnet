@@ -220,8 +220,9 @@ class CustomOperator {
     }
   }
   void SetNumThreads(int num_threads) {
+    static std::once_flag flag1;
     for (int i = workers_.size(); i < num_threads; ++i) {
-      workers_.emplace_back(std::thread([this]{this->ThreadTarget();}));
+      std::call_once(flag1, [this](){workers_.emplace_back(std::thread([this]{this->ThreadTarget();})); });
       ++num_free_threads_;
     }
   }
