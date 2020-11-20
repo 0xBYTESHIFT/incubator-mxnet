@@ -221,11 +221,14 @@ class CustomOperator {
   }
   void SetNumThreads(int num_threads) {
     static std::once_flag flag1;
+    static int count_of_call = 0;
     for (int i = workers_.size(); i < num_threads; ++i) {
       //std::call_once(flag1, [this](){workers_.emplace_back(std::thread([this]{this->ThreadTarget();})); });
       workers_.emplace_back(std::thread([this]{this->ThreadTarget();}));
       ++num_free_threads_;
+      count_of_call++;
     }
+    std::cerr << "--------Count of call creating threads: " << count_of_call << std::endl;
   }
   void CreateThreads(int num_new_threads) {
     SetNumThreads(workers_.size() + num_new_threads);
