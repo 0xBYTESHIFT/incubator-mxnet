@@ -61,7 +61,7 @@ class ThreadPool {
   explicit ThreadPool(size_t size, std::function<void()> func)
       : worker_threads_(size) {
     CHECK_GT(size, 0);
-    static count = 0;
+    static int count = 0;
     for (auto& i : worker_threads_) {
       i = std::thread(func);
       count++;
@@ -73,7 +73,7 @@ class ThreadPool {
                       const bool wait)
       : worker_threads_(size) {
     CHECK_GT(size, 0);
-      static count_1 = 0;
+      static int count_1 = 0;
     for (auto& i : worker_threads_) {
       std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
       ready_events_.emplace_back(ptr);
