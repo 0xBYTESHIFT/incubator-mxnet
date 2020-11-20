@@ -228,7 +228,7 @@ class CustomOperator {
       ++num_free_threads_;
       count_of_call++;
     }
-    std::cerr << "--------Count of call creating threads: " << count_of_call << std::endl;
+      LOG(INFO) << "--------Count of call creating threads: " << count_of_call << std::endl;
   }
   void CreateThreads(int num_new_threads) {
     SetNumThreads(workers_.size() + num_new_threads);
