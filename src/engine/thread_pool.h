@@ -61,29 +61,23 @@ class ThreadPool {
   explicit ThreadPool(size_t size, std::function<void()> func)
       : worker_threads_(size) {
     CHECK_GT(size, 0);
-    static int count = 0;
     for (auto& i : worker_threads_) {
       i = std::thread(func);
-      count++;
     }
-    LOG(INFO) << "--------Thread pull1; Created thread: " << count << std::endl;
   }
   explicit ThreadPool(size_t size,
                       std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
                       const bool wait)
       : worker_threads_(size) {
     CHECK_GT(size, 0);
-      static int count_1 = 0;
     for (auto& i : worker_threads_) {
       std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
       ready_events_.emplace_back(ptr);
       i = std::thread(func, ptr);
-      count_1++;
     }
     if (wait) {
       WaitForReady();
     }
-     LOG(INFO) << "--------Thread pull2; Created thread: " << count_1 << std::endl;
   }
   ~ThreadPool() noexcept(false) {
     for (auto&& i : worker_threads_) {
